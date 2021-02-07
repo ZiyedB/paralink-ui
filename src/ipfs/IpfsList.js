@@ -1,6 +1,7 @@
-import React from "react";
+import { Button, Header, Table } from "semantic-ui-react";
+
 import { Link } from "react-router-dom";
-import { Table, Header, Button } from "semantic-ui-react";
+import React from "react";
 
 class IpfsList extends React.Component {
   API_PATH = "http://127.0.0.1:7424/api";
@@ -32,10 +33,10 @@ class IpfsList extends React.Component {
 
   render() {
     return (
-      <div class="column">
+      <div className="column">
         <Link to="/ipfs/new">
           <Button primary>
-            <i class="plus icon"></i>New PQL definition
+            <i className="plus icon"></i>New PQL definition
           </Button>
         </Link>
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Header, Segment, Grid, Message } from "semantic-ui-react";
+import { Button, Grid, Header, Message, Segment } from "semantic-ui-react";
 
 import ace from "brace";
 import "brace/mode/json";
@@ -81,10 +81,10 @@ class Ipfs extends React.Component {
       return (
         <Grid>
           <Grid.Row>
-            <div class="ui big breadcrumb">
+            <div className="ui big breadcrumb">
               <Link to="/ipfs">IPFS</Link>
-              <i class="right chevron icon divider"></i>
-              <div class="active section">{this.state.hash}</div>
+              <i className="right chevron icon divider"></i>
+              <div className="active section">{this.state.hash}</div>
             </div>
           </Grid.Row>
           <Grid.Row>
