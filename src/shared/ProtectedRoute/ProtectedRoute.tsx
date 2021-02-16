@@ -1,17 +1,21 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
-import UserContext from '../../hooks/UserContext';
+import { UserState } from '../../state/user';
 
 // Disable the eslint for next any
 // eslint-disable-next-line
 const ProtectedRoute = ({ component: Component, ...rest }: any): JSX.Element => {
-  const userContext = useContext(UserContext);
+  const isLoggedIn = useSelector<any, UserState['isLoggedIn']>((state) => {
+    return state.user.isLoggedIn;
+  });
+
   /** Verify that user is logged in otherwise redirect to login page */
   return (
     <Route
       {...rest}
-      render={(props) =>
-        userContext.isLoggedIn ? (
+      render={(props: any) =>
+        isLoggedIn ? (
           <Component {...props} />
         ) : (
           <Redirect

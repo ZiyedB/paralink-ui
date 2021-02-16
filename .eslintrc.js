@@ -40,12 +40,5 @@ module.exports = {
         ],
       },
     },
-    {
-      // enable the rule specifically for TypeScript files
-      files: ['*.ts', '*.tsx'],
-      rules: {
-        '@typescript-eslint/explicit-module-boundary-types': ['error'],
-      },
-    },
   ],
 };

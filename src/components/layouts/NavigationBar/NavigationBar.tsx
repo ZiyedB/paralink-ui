@@ -1,14 +1,17 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { FaUserCircle } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import UserContext from '../../../hooks/UserContext';
+import { userActionTypes, UserState } from '../../../state/user';
 import './NavigationBar.scss';
 
 const NavigationBar = (): JSX.Element => {
-  const userContext = useContext(UserContext);
+  const isLoggedIn = useSelector<UserState, UserState['isLoggedIn']>((state) => state.isLoggedIn);
+
+  const dispatch = useDispatch();
 
   const logout = (): void => {
-    userContext.logout();
+    dispatch(userActionTypes.LOGOUT);
   };
 
   return (
@@ -29,7 +32,7 @@ const NavigationBar = (): JSX.Element => {
             </ul>
           </div>
         </div>
-        {userContext.isLoggedIn ? (
+        {isLoggedIn ? (
           <div className="navigation-bar__user">
             {/* TODO: Need to have this as a small menu showing up */}
             <a className="navigation-bar__link navigation-bar__user-link" onClick={logout} href="/">

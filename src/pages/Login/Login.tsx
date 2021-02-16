@@ -1,25 +1,27 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { connect, useDispatch } from 'react-redux';
 import { Redirect, RouteComponentProps } from 'react-router-dom';
-import UserContext from '../../hooks/UserContext';
 import paralinkApi from '../../services/interceptor';
+import { userActions, userQuery } from '../../state/user';
 import './Login.scss';
 
-interface LoginProps {
-  from: string;
+interface LoginProps extends RouteComponentProps {
+  isLoggedIn: boolean;
 }
 
-const Login = (props: RouteComponentProps<{}, {}, LoginProps>): JSX.Element => {
-  const userContext = useContext(UserContext);
+const Login = (props: LoginProps): JSX.Element => {
+  const dispatch = useDispatch();
 
+  // Form state
   const [state, setState] = React.useState({
     email: '',
     password: '',
     seePassword: false,
   });
+  const { from } = (props.location.state as any) || { from: { pathname: '/' } };
 
-  const { from } = props.location.state || { from: { pathname: '/' } };
-
+  // Handling form changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { id, value } = e.target;
     setState((prevState) => ({
@@ -28,6 +30,7 @@ const Login = (props: RouteComponentProps<{}, {}, LoginProps>): JSX.Element => {
     }));
   };
 
+  // Click to see or not the password
   const togglePassword = (): void => {
     setState((prevState) => ({
       ...prevState,
@@ -40,14 +43,14 @@ const Login = (props: RouteComponentProps<{}, {}, LoginProps>): JSX.Element => {
 
     // TODO: do like a safe check on the email & password here
 
-    // Just to check
+    // Just to check, Potentially handle this in an effect
     await paralinkApi
       // For now this is going to be the placeholder
       .get('https://jsonplaceholder.typicode.com/todos')
       .then(() => {
         // We should get the login token here from the BE
         const token = 'faketokenhere';
-        userContext.login(token);
+        dispatch(userActions.login(token));
       })
       .catch((err: any) => {
         // TODO: Need to display the error in the UI ( user not found, not correct password, not correct email)
@@ -58,7 +61,8 @@ const Login = (props: RouteComponentProps<{}, {}, LoginProps>): JSX.Element => {
       });
   };
 
-  if (userContext.isLoggedIn) {
+  // Redirect if user logged in
+  if (props.isLoggedIn) {
     return <Redirect to={from} />;
   }
 
@@ -105,4 +109,10 @@ const Login = (props: RouteComponentProps<{}, {}, LoginProps>): JSX.Element => {
   );
 };
 
-export default Login;
+const mapStateToProps = (state: any): { isLoggedIn: boolean } => {
+  return {
+    isLoggedIn: userQuery.isLoggedIn(state),
+  };
+};
+
+export default connect(mapStateToProps)(Login);
